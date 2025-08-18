@@ -17,7 +17,7 @@ function ReportView({ report, email: propEmail }) {
   const fetchComments = async () => {
     setLoadingComments(true);
     try {
-      const res = await fetch(`https://qsl-services-report-backend.vercel.app//comments/${report.id}`);
+      const res = await fetch(`https://qsl-services-report-backend.vercel.app/comments/${report.id}`);
       const data = await res.json();
       if (res.ok) setComments(data);
       else setComments([]);
@@ -38,7 +38,7 @@ function ReportView({ report, email: propEmail }) {
     e.preventDefault();
     if (!text.trim()) return;
     try {
-      const res = await fetch(`https://qsl-services-report-backend.vercel.app//comments/${report.id}`, {
+      const res = await fetch(`https://qsl-services-report-backend.vercel.app/comments/${report.id}`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email, text }),
@@ -72,7 +72,7 @@ function ReportView({ report, email: propEmail }) {
         {report.name} <span style={{ color: "#666" }}>(v{report.version})</span>
       </h3>
       <a
-        href={`https://qsl-services-report-backend.vercel.app//download/${report.id}`}
+        href={`https://qsl-services-report-backend.vercel.app/download/${report.id}`}
         target="_blank"
         rel="noreferrer"
         style={{

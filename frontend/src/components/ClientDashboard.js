@@ -19,7 +19,7 @@ function ClientDashboard({ onLogout, email: propEmail }) {
     try {
       const token = localStorage.getItem("rp_token");
       const headers = token ? { Authorization: `Bearer ${token}` } : {};
-      const res = await fetch(`https://qsl-services-report-backend.vercel.app//projects?email=${email}`, { headers });
+      const res = await fetch(`https://qsl-services-report-backend.vercel.app/projects?email=${email}`, { headers });
       const data = await res.json();
       if (res.ok) setProjects(data);
       else console.error("Error fetching:", data.error || data);
@@ -40,7 +40,7 @@ function ClientDashboard({ onLogout, email: propEmail }) {
     formData.append("email", email);
 
     const res = await fetch(
-      `https://qsl-services-report-backend.vercel.app//project/${projectId}/add-report`,
+      `https://qsl-services-report-backend.vercel.app/project/${projectId}/add-report`,
       {
         method: "POST",
         body: formData,
@@ -140,7 +140,7 @@ function ClientDashboard({ onLogout, email: propEmail }) {
               >
                 {r.name} (v{r.version}){" "}
                 <a
-                  href={`https://qsl-services-report-backend.vercel.app/${r.download_url}`}
+                  href={`https://qsl-services-report-backend.vercel.app${r.download_url}`}
                   target="_blank"
                   rel="noreferrer"
                   style={{

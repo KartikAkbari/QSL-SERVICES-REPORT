@@ -26,7 +26,7 @@ function Login({ onLogin }) {
 
     // Client flow → request OTP
     try {
-      const res = await fetch("https://qsl-services-report-backend.vercel.app//generate-otp", {
+      const res = await fetch("https://qsl-services-report-backend.vercel.app/generate-otp", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email }),
@@ -48,7 +48,7 @@ function Login({ onLogin }) {
   const handleVerifyOtp = async (e) => {
     e.preventDefault();
     try {
-      const res = await fetch("https://qsl-services-report-backend.vercel.app//verify-otp", {
+      const res = await fetch("https://qsl-services-report-backend.vercel.app/verify-otp", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email, otp }),
@@ -70,7 +70,7 @@ function Login({ onLogin }) {
   const handleAdminLogin = async (e) => {
     e.preventDefault();
     try {
-      const res = await fetch("https://qsl-services-report-backend.vercel.app//admin-login", {
+      const res = await fetch("https://qsl-services-report-backend.vercel.app/admin-login", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email, password }),

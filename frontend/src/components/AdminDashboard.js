@@ -27,7 +27,7 @@ function AdminDashboard({ onLogout }) {
     try {
       const token = localStorage.getItem("rp_token");
       const headers = token ? { Authorization: `Bearer ${token}` } : {};
-      const res = await fetch(`https://qsl-services-report-backend.vercel.app//projects?email=${email}`, { headers });
+      const res = await fetch(`https://qsl-services-report-backend.vercel.app/projects?email=${email}`, { headers });
       const data = await res.json();
       if (res.ok) setProjects(data);
       else alert(data.error || "Failed to fetch projects");
@@ -41,7 +41,7 @@ function AdminDashboard({ onLogout }) {
     try {
       const token = localStorage.getItem("rp_token");
       const headers = token ? { Authorization: `Bearer ${token}` } : {};
-      const res = await fetch("https://qsl-services-report-backend.vercel.app//admin/clients", { headers });
+      const res = await fetch("https://qsl-services-report-backend.vercel.app/admin/clients", { headers });
       const data = await res.json();
       if (res.ok || Array.isArray(data)) setClients(data);
       else alert(data.error || "Failed to fetch clients");
@@ -67,7 +67,7 @@ function AdminDashboard({ onLogout }) {
     formData.append("client_id", uploadClientId);
     formData.append("title", projectTitle);
 
-    const res = await fetch("https://qsl-services-report-backend.vercel.app//admin/create-project", {
+    const res = await fetch("https://qsl-services-report-backend.vercel.app/admin/create-project", {
       method: "POST",
       body: formData,
     });
@@ -90,7 +90,7 @@ function AdminDashboard({ onLogout }) {
     formData.append("file", f);
     formData.append("email", email);
 
-    const res = await fetch(`https://qsl-services-report-backend.vercel.app//project/${projectId}/add-report`, {
+    const res = await fetch(`https://qsl-services-report-backend.vercel.app/project/${projectId}/add-report`, {
       method: "POST",
       body: formData,
     });
@@ -105,7 +105,7 @@ function AdminDashboard({ onLogout }) {
 
   const addClient = async (e) => {
     e.preventDefault();
-    const res = await fetch("https://qsl-services-report-backend.vercel.app//admin/add-client", {
+    const res = await fetch("https://qsl-services-report-backend.vercel.app/admin/add-client", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ email: newClientEmail }),
@@ -118,7 +118,7 @@ function AdminDashboard({ onLogout }) {
   };
 
   const updateClient = async (id) => {
-    const res = await fetch(`https://qsl-services-report-backend.vercel.app//admin/update-client/${id}`, {
+    const res = await fetch(`https://qsl-services-report-backend.vercel.app/admin/update-client/${id}`, {
       method: "PUT",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ email: editEmail }),
@@ -135,7 +135,7 @@ function AdminDashboard({ onLogout }) {
 
   const deleteClient = async (id) => {
     if (!window.confirm("Delete this client?")) return;
-    const res = await fetch(`https://qsl-services-report-backend.vercel.app//admin/delete-client/${id}`, { method: "DELETE" });
+    const res = await fetch(`https://qsl-services-report-backend.vercel.app/admin/delete-client/${id}`, { method: "DELETE" });
     const data = await res.json();
     if (res.ok) {
       setClients((prev) => prev.filter((c) => c.id !== id));
@@ -143,7 +143,7 @@ function AdminDashboard({ onLogout }) {
   };
 
   const toggleClient = async (id) => {
-    const res = await fetch(`https://qsl-services-report-backend.vercel.app//admin/toggle-client/${id}`, { method: "PATCH" });
+    const res = await fetch(`https://qsl-services-report-backend.vercel.app/admin/toggle-client/${id}`, { method: "PATCH" });
     const data = await res.json();
     if (res.ok) {
       setClients((prev) =>
@@ -410,7 +410,7 @@ function AdminDashboard({ onLogout }) {
                 {p.reports.map((r) => (
                   <li key={r.id} style={{ marginBottom: "6px", wordBreak: "break-word" }}>
                     {r.name} (v{r.version}) — {r.uploaded_by} @ {new Date(r.uploaded_at).toLocaleString()}{" "}
-                    <a href={`https://qsl-services-report-backend.vercel.app/${r.download_url}`} target="_blank" rel="noreferrer" style={{ marginLeft: "10px", color: "#0275d8" }}>
+                    <a href={`https://qsl-services-report-backend.vercel.app${r.download_url}`} target="_blank" rel="noreferrer" style={{ marginLeft: "10px", color: "#0275d8" }}>
                       Download
                     </a>
                     <button
