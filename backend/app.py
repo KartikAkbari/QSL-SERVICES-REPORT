@@ -13,7 +13,7 @@ import jwt
 app = Flask(__name__)
 
 # CORS (relaxed for local dev; tighten for prod)
-CORS(app, resources={r"/*": {"origins": ["https://qsl-services-report.vercel.app/","http://localhost:3000", "http://127.0.0.1:3000"]}}, supports_credentials=True)
+CORS(app, resources={r"/*": {"origins": ["https://qsl-services-report.vercel.app","http://localhost:3000", "http://127.0.0.1:3000"]}}, supports_credentials=True)
 
 # SQLite
 app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///portal.db"
