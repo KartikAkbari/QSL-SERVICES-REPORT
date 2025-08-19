@@ -237,22 +237,26 @@ def verify_otp():
 
 @app.route("/admin-login", methods=["POST"])
 def admin_login():
-    data = request.get_json(silent=True) or {}
-    email = (data.get("email") or "").strip().lower()
-    password = data.get("password") or ""
+    try:
+        data = request.get_json(silent=True) or {}
+        email = (data.get("email") or "").strip().lower()
+        password = data.get("password") or ""
 
-    if email not in [adm.strip().lower() for adm in ADMIN_EMAILS]:
-        return jsonify({"error": "Not an admin"}), 403
+        if email not in [adm.strip().lower() for adm in ADMIN_EMAILS]:
+            return jsonify({"error": "Not an admin"}), 403
 
-    if password != ADMIN_PASSWORD:
-        return jsonify({"error": "Invalid password"}), 401
+        if password != ADMIN_PASSWORD:
+            return jsonify({"error": "Invalid password"}), 401
 
-    user = User(email=email, role="admin")
-    db.session.add(user)
-    db.session.commit()
+        user = User(email=email, role="admin")
+        db.session.add(user)
+        db.session.commit()
 
-    token = create_token(email, "admin")
-    return jsonify({"message": "Admin login successful", "user": {"email": email, "role": "admin"}, "token": token}), 200
+        token = create_token(email, "admin")
+        return jsonify({"message": "Admin login successful", "user": {"email": email, "role": "admin"}, "token": token}), 200
+    except Exception as e:
+        print("Error during admin login:", e)
+        return jsonify({"error": "Internal server error"}), 500
 
 # -------------------- CLIENT MANAGEMENT --------------------
 @app.route("/admin/add-client", methods=["POST"])
