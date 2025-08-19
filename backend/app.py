@@ -13,7 +13,7 @@ import jwt
 app = Flask(__name__)
 
 # CORS (relaxed for local dev; tighten for prod)
-CORS(app, resources={r"/*": {"origins": ["https://qsl-services-report.vercel.app","http://localhost:3000", "http://127.0.0.1:3000"]}}, supports_credentials=True)
+CORS(app, resources={r"/*": {"origins": ["http://localhost:3000", "http://127.0.0.1:3000"]}}, supports_credentials=True)
 
 # SQLite
 app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///portal.db"
@@ -29,15 +29,15 @@ ADMIN_EMAILS = os.getenv("ADMIN_EMAILS", "admin@example.com").split(",")
 ADMIN_PASSWORD = os.getenv("ADMIN_PASSWORD", "admin123")
 
 # Mail (set env vars for production)
-app.config["MAIL_SERVER"] = os.getenv("MAIL_SERVER")
+app.config["MAIL_SERVER"] = os.getenv("MAIL_SERVER", "smtp.gmail.com")
 app.config["MAIL_PORT"] = int(os.getenv("MAIL_PORT", "587"))
 app.config["MAIL_USE_TLS"] = os.getenv("MAIL_USE_TLS", "true").lower() == "true"
-app.config["MAIL_USERNAME"] = os.getenv("MAIL_USERNAME")
-app.config["MAIL_PASSWORD"] = os.getenv("MAIL_PASSWORD")
+app.config["MAIL_USERNAME"] = os.getenv("MAIL_USERNAME", "chanduchotli9@gmail.com")
+app.config["MAIL_PASSWORD"] = os.getenv("MAIL_PASSWORD", "drpu plji uych elhk")
 app.config["MAIL_DEFAULT_SENDER"] = os.getenv("MAIL_DEFAULT_SENDER", app.config["MAIL_USERNAME"])
 
 # JWT secret
-app.config["SECRET_KEY"] = os.getenv("SECRET_KEY")
+app.config["SECRET_KEY"] = os.getenv("SECRET_KEY", "change_this_secret_in_prod")
 
 db = SQLAlchemy(app)
 mail = Mail(app)
@@ -237,26 +237,22 @@ def verify_otp():
 
 @app.route("/admin-login", methods=["POST"])
 def admin_login():
-    try:
-        data = request.get_json(silent=True) or {}
-        email = (data.get("email") or "").strip().lower()
-        password = data.get("password") or ""
+    data = request.get_json(silent=True) or {}
+    email = (data.get("email") or "").strip().lower()
+    password = data.get("password") or ""
 
-        if email not in [adm.strip().lower() for adm in ADMIN_EMAILS]:
-            return jsonify({"error": "Not an admin"}), 403
+    if email not in [adm.strip().lower() for adm in ADMIN_EMAILS]:
+        return jsonify({"error": "Not an admin"}), 403
 
-        if password != ADMIN_PASSWORD:
-            return jsonify({"error": "Invalid password"}), 401
+    if password != ADMIN_PASSWORD:
+        return jsonify({"error": "Invalid password"}), 401
 
-        user = User(email=email, role="admin")
-        db.session.add(user)
-        db.session.commit()
+    user = User(email=email, role="admin")
+    db.session.add(user)
+    db.session.commit()
 
-        token = create_token(email, "admin")
-        return jsonify({"message": "Admin login successful", "user": {"email": email, "role": "admin"}, "token": token}), 200
-    except Exception as e:
-        print("Error during admin login:", e)
-        return jsonify({"error": "Internal server error"}), 500
+    token = create_token(email, "admin")
+    return jsonify({"message": "Admin login successful", "user": {"email": email, "role": "admin"}, "token": token}), 200
 
 # -------------------- CLIENT MANAGEMENT --------------------
 @app.route("/admin/add-client", methods=["POST"])
