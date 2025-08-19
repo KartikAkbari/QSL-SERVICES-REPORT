@@ -29,15 +29,15 @@ ADMIN_EMAILS = os.getenv("ADMIN_EMAILS", "admin@example.com").split(",")
 ADMIN_PASSWORD = os.getenv("ADMIN_PASSWORD", "admin123")
 
 # Mail (set env vars for production)
-app.config["MAIL_SERVER"] = os.getenv("MAIL_SERVER", "smtp.gmail.com")
+app.config["MAIL_SERVER"] = os.getenv("MAIL_SERVER")
 app.config["MAIL_PORT"] = int(os.getenv("MAIL_PORT", "587"))
 app.config["MAIL_USE_TLS"] = os.getenv("MAIL_USE_TLS", "true").lower() == "true"
-app.config["MAIL_USERNAME"] = os.getenv("MAIL_USERNAME", "chanduchotli9@gmail.com") 
-app.config["MAIL_PASSWORD"] = os.getenv("MAIL_PASSWORD", "drpu plji uych elhk")
+app.config["MAIL_USERNAME"] = os.getenv("MAIL_USERNAME")
+app.config["MAIL_PASSWORD"] = os.getenv("MAIL_PASSWORD")
 app.config["MAIL_DEFAULT_SENDER"] = os.getenv("MAIL_DEFAULT_SENDER", app.config["MAIL_USERNAME"])
 
 # JWT secret
-app.config["SECRET_KEY"] = os.getenv("SECRET_KEY", "change_this_secret_in_prod")
+app.config["SECRET_KEY"] = os.getenv("SECRET_KEY")
 
 db = SQLAlchemy(app)
 mail = Mail(app)
